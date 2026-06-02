@@ -1,1 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Whalcy Whale | NFT Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ocean: #0a1628;
+      --deep: #050d1a;
+      --blue: #1a6fd4;
+      --cyan: #00d4ff;
+      --gold: #ffd700;
+      --gold2: #ffaa00;
+      --white: #f0f8ff;
+      --card-bg: #0d2240;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ctext y='20' font-size='20'%3E🐳%3C/text%3E%3C/svg%3E") 12 12, auto;
+    }
+
+    /* ── BUBBLES ── */
+    .bubbles {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .bubble {
+      position: absolute; bottom: -60px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(0,212,255,0.35), rgba(26,111,212,0.1));
+      border: 1px solid rgba(0,212,255,0.2);
+      animation: rise linear infinite;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) scale(1); opacity: .7; }
+      100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+      background: radial-gradient(ellipse at 50% 80%, #0d2f6e 0%, #050d1a 70%);
+      overflow: hidden;
+    }
+    .ocean-waves {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%230a1628' d='M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x bottom;
+      animation: waveMove 6s ease-in-out infinite alternate;
+    }
+    @keyframes waveMove {
+      from { background-position-x: 0; }
+      to   { background-position-x: 200px; }
+    }
+
+    .hero-banner {
+      width: min(420px, 90vw);
+      border-radius: 24px;
+      box-shadow: 0 0 60px rgba(0,212,255,0.4), 0 0 120px rgba(26,111,212,0.2);
+      animation: floatWhale 4s ease-in-out infinite, fadeIn .8s ease both;
+      border: 3px solid rgba(0,212,255,0.3);
+      position: relative; z-index: 2;
+    }
+    @keyframes floatWhale {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%      { transform: translateY(-18px) rotate(1deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(40px) scale(.9); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .hero-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 10vw, 6rem);
+      letter-spacing: .08em;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--cyan) 60%, var(--gold2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      margin: 1.2rem 0 .5rem;
+      animation: fadeIn .8s .2s both;
+      position: relative; z-index: 2;
+    }
+    .hero-sub {
+      font-size: clamp(.95rem, 2.5vw, 1.3rem);
+      color: rgba(240,248,255,.7);
+      max-width: 540px;
+      animation: fadeIn .8s .4s both;
+      position: relative; z-index: 2;
+    }
+    .hero-badges {
+      display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center;
+      margin: 1.4rem 0;
+      animation: fadeIn .8s .6s both;
+      position: relative; z-index: 2;
+    }
+    .badge {
+      padding: .4rem 1.1rem; border-radius: 999px;
+      font-weight: 700; font-size: .85rem;
+      border: 2px solid; letter-spacing: .05em;
+    }
+    .badge-gold  { border-color: var(--gold);  color: var(--gold);  background: rgba(255,215,0,.1); }
+    .badge-cyan  { border-color: var(--cyan);  color: var(--cyan);  background: rgba(0,212,255,.1); }
+    .badge-blue  { border-color: #6699ff; color: #6699ff; background: rgba(102,153,255,.1); }
+
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000; font-family: 'Bangers', cursive;
+      font-size: 1.3rem; letter-spacing: .1em;
+      padding: .85rem 2.4rem; border-radius: 999px;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 4px 30px rgba(255,215,0,.4);
+      transition: transform .2s, box-shadow .2s;
+      animation: fadeIn .8s .8s both;
+      position: relative; z-index: 2;
+    }
+    .cta-btn:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 8px 50px rgba(255,215,0,.6);
+    }
+
+    /* ── STATS BAR ── */
+    #stats {
+      background: var(--ocean);
+      border-top: 1px solid rgba(0,212,255,.15);
+      border-bottom: 1px solid rgba(0,212,255,.15);
+      padding: 2rem 1rem;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem;
+      position: relative; z-index: 1;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Bangers', cursive;
+      font-size: 2.5rem; letter-spacing: .06em;
+      color: var(--gold);
+      display: block;
+    }
+    .stat-label { font-size: .8rem; color: rgba(240,248,255,.5); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      letter-spacing: .1em;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .section-title span { color: var(--cyan); }
+    .section-title::after {
+      content: '';
+      display: block; margin: .5rem auto 0;
+      width: 80px; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--cyan));
+      border-radius: 2px;
+    }
+
+    /* ── COLLECTION GRID ── */
+    #collection {
+      padding: 5rem 1.5rem;
+      max-width: 1400px; margin: 0 auto;
+    }
+
+    /* filter bar */
+    .filter-bar {
+      display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .filter-btn {
+      padding: .4rem 1.2rem; border-radius: 999px;
+      border: 2px solid rgba(0,212,255,.3);
+      background: transparent; color: rgba(240,248,255,.7);
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .85rem;
+      cursor: pointer; transition: all .2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--cyan); border-color: var(--cyan); color: #000;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── NFT CARD ── */
+    .nft-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid rgba(0,212,255,.12);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      animation: cardPop .4s ease both;
+      position: relative;
+    }
+    @keyframes cardPop {
+      from { opacity:0; transform: scale(.85) translateY(20px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .nft-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 16px 40px rgba(0,212,255,.25);
+      border-color: var(--cyan);
+    }
+    .nft-card:hover .card-shine { opacity: 1; }
+
+    .card-shine {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%);
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+
+    .card-img-wrap {
+      width: 100%; aspect-ratio: 1;
+      position: relative; overflow: hidden;
+    }
+    .card-canvas {
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    .rarity-badge {
+      position: absolute; top: 8px; right: 8px;
+      padding: 2px 8px; border-radius: 999px;
+      font-size: .65rem; font-weight: 900;
+      letter-spacing: .07em; text-transform: uppercase;
+    }
+    .r-legendary { background: linear-gradient(135deg,#ffd700,#ff8c00); color:#000; }
+    .r-epic      { background: linear-gradient(135deg,#a855f7,#7c3aed); color:#fff; }
+    .r-rare      { background: linear-gradient(135deg,#3b82f6,#06b6d4); color:#fff; }
+    .r-common    { background: rgba(255,255,255,.15); color:rgba(255,255,255,.8); }
+
+    .card-info {
+      padding: .7rem .9rem .8rem;
+    }
+    .card-name {
+      font-family: 'Bangers', cursive;
+      font-size: 1rem; letter-spacing: .06em;
+      color: var(--white); margin-bottom: .2rem;
+    }
+    .card-trait {
+      font-size: .72rem; color: rgba(240,248,255,.5);
+      margin-bottom: .5rem;
+    }
+    .card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-price {
+      font-size: .8rem; font-weight: 900; color: var(--gold);
+    }
+    .card-btn {
+      font-size: .7rem; font-weight: 700;
+      background: rgba(0,212,255,.15); color: var(--cyan);
+      border: 1px solid rgba(0,212,255,.3); border-radius: 6px;
+      padding: 3px 10px; cursor: pointer;
+      transition: background .2s;
+      text-decoration: none;
+    }
+    .card-btn:hover { background: rgba(0,212,255,.3); }
+
+    /* ── MODAL ── */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.75); z-index: 100;
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    #modal-overlay.open { display: flex; }
+    #modal {
+      background: #0d2240; border-radius: 24px;
+      border: 2px solid rgba(0,212,255,.3);
+      max-width: 440px; width: 100%;
+      padding: 2rem; position: relative;
+      box-shadow: 0 0 60px rgba(0,212,255,.2);
+      animation: modalIn .3s ease both;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(.9) translateY(20px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    #modal-close {
+      position: absolute; top: 1rem; right: 1.2rem;
+      background: none; border: none; color: rgba(240,248,255,.5);
+      font-size: 1.6rem; cursor: pointer; line-height: 1;
+    }
+    #modal-close:hover { color: var(--cyan); }
+    #modal canvas { width: 100%; border-radius: 16px; margin-bottom: 1.2rem; }
+    #modal-name { font-family:'Bangers',cursive; font-size:2rem; letter-spacing:.08em; color:var(--gold); }
+    #modal-rarity { font-size:.85rem; margin:.3rem 0 .8rem; }
+    .modal-traits { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.2rem; }
+    .modal-trait-tag {
+      padding:.3rem .8rem; border-radius:999px;
+      background:rgba(0,212,255,.1); border:1px solid rgba(0,212,255,.25);
+      font-size:.78rem; color:var(--cyan);
+    }
+    #modal-opensea {
+      display:block; text-align:center;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#000; font-family:'Bangers',cursive; font-size:1.2rem;
+      letter-spacing:.1em; padding:.7rem 2rem; border-radius:999px;
+      text-decoration:none;
+      transition:transform .2s, box-shadow .2s;
+    }
+    #modal-opensea:hover { transform:scale(1.04); box-shadow:0 6px 30px rgba(255,215,0,.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 3rem 1rem 2rem;
+      border-top: 1px solid rgba(0,212,255,.1);
+      color: rgba(240,248,255,.35); font-size: .85rem;
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* scroll reveal */
+    .reveal { opacity:0; transform:translateY(30px); transition: opacity .6s, transform .6s; }
+    .reveal.visible { opacity:1; transform:none; }
+  </style>
+</head>
+<body>
+
+<!-- Floating bubbles -->
+<div class="bubbles" id="bubbles"></div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <img class="hero-banner" src="E92DD2E6-5FBE-4F68-B8EA-2491CD873AD0.png" alt="Whalcy Whale King"/>
+  <h1 class="hero-title">WHALCY WHALE</h1>
+  <p class="hero-sub">99 uniquely generated whale NFTs — each one crowned, dripped, and ready to rule the ocean. 🌊</p>
+  <div class="hero-badges">
+    <span class="badge badge-gold">👑 99 Unique NFTs</span>
+    <span class="badge badge-cyan">🌊 On-Chain</span>
+    <span class="badge badge-blue">⚓ OpenSea Verified</span>
+  </div>
+  <a class="cta-btn" href="https://opensea.io/collection/whalcy-whale" target="_blank">
+    🐳 View on OpenSea
+  </a>
+  <div class="ocean-waves"></div>
+</section>
+
+<!-- ── STATS ── -->
+<section id="stats">
+  <div class="stat"><span class="stat-num" id="cnt-items">99</span><span class="stat-label">Items</span></div>
+  <div class="stat"><span class="stat-num">4</span><span class="stat-label">Rarities</span></div>
+  <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Vibes</span></div>
+  <div class="stat"><span class="stat-num">1</span><span class="stat-label">Collection</span></div>
+</section>
+
+<!-- ── COLLECTION ── -->
+<section id="collection">
+  <h2 class="section-title reveal">The <span>Collection</span></h2>
+
+  <div class="filter-bar reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="legendary">👑 Legendary</button>
+    <button class="filter-btn" data-filter="epic">💜 Epic</button>
+    <button class="filter-btn" data-filter="rare">💙 Rare</button>
+    <button class="filter-btn" data-filter="common">⚪ Common</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ── MODAL ── -->
+<div id="modal-overlay">
+  <div id="modal">
+    <button id="modal-close">✕</button>
+    <canvas id="modal-canvas" width="400" height="400"></canvas>
+    <div id="modal-name"></div>
+    <div id="modal-rarity"></div>
+    <div class="modal-traits" id="modal-traits"></div>
+    <a id="modal-opensea" href="https://opensea.io/collection/whalcy-whale" target="_blank">
+      🐳 View on OpenSea
+    </a>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2025 <strong>Whalcy Whale</strong> NFT Collection &nbsp;·&nbsp;
+     <a href="https://opensea.io/collection/whalcy-whale" target="_blank">OpenSea</a>
+  </p>
+  <p style="margin-top:.5rem;font-size:.75rem;">Built with 🐳 & 💙 on the blockchain</p>
+</footer>
+
+<script>
+/* ─── DATA ─── */
+const RARITIES = ['legendary','epic','rare','common'];
+const RARITY_WEIGHTS = [5, 15, 35, 45]; // % chances
+const TRAITS = {
+  hat:    ['Crown 👑','Pirate 🏴‍☠️','Captain ⚓','Headphones 🎧','Astronaut 🚀','Samurai ⚔️','Cowboy 🤠','Beanie 🧢','None'],
+  eyes:   ['Pixel Shades 🕶️','Gold Eyes ✨','Laser 🔴','Wink 😉','Star Eyes ⭐','3D Glasses','Normal'],
+  chain:  ['Gold Chain 📿','Diamond W 💎','Anchor Chain ⚓','None'],
+  bg:     ['Ocean Sunset 🌅','Deep Blue 🌊','Purple Cosmos 🌌','Coral Reef 🪸','Midnight 🌑','Golden Hour ☀️'],
+  mood:   ['Happy 😄','Drip King 👑','Savage 😤','Chill 😎','Epic 🔥','Legendary ✨'],
+};
+const BG_COLORS = {
+  'Ocean Sunset 🌅': ['#ff6b35','#f7c59f','#1a6fd4'],
+  'Deep Blue 🌊':    ['#0a1628','#1a6fd4','#00d4ff'],
+  'Purple Cosmos 🌌':['#1a0533','#7c3aed','#a855f7'],
+  'Coral Reef 🪸':   ['#0d4f3c','#10b981','#ff6b9d'],
+  'Midnight 🌑':     ['#050505','#1a1a2e','#16213e'],
+  'Golden Hour ☀️':  ['#7c2d12','#ea580c','#fbbf24'],
+};
+const RARITY_COLORS = {
+  legendary:'#ffd700', epic:'#a855f7', rare:'#3b82f6', common:'#6b7280'
+};
+
+function pickRarity() {
+  const r = Math.random()*100;
+  let acc=0;
+  for(let i=0;i<RARITIES.length;i++){acc+=RARITY_WEIGHTS[i];if(r<acc)return RARITIES[i];}
+  return 'common';
+}
+function pickTrait(key){ return TRAITS[key][Math.floor(Math.random()*TRAITS[key].length)]; }
+
+/* seeded random so cards are stable */
+function seeded(seed){
+  let s=seed; return ()=>{ s=(s*16807+0)%2147483647; return(s-1)/2147483646; };
+}
+
+const CARDS = Array.from({length:99},(_,i)=>{
+  const rng=seeded(i*7919+42);
+  const rarity=RARITIES[Math.floor(rng()*RARITY_WEIGHTS.length)] || pickRarity();
+  // deterministic rarity by weight
+  const w=rng()*100; let r='common',a=0;
+  for(let j=0;j<RARITIES.length;j++){a+=RARITY_WEIGHTS[j];if(w<a){r=RARITIES[j];break;}}
+  const bg=TRAITS.bg[Math.floor(rng()*TRAITS.bg.length)];
+  const hat=TRAITS.hat[Math.floor(rng()*TRAITS.hat.length)];
+  const eyes=TRAITS.eyes[Math.floor(rng()*TRAITS.eyes.length)];
+  const chain=TRAITS.chain[Math.floor(rng()*TRAITS.chain.length)];
+  const mood=TRAITS.mood[Math.floor(rng()*TRAITS.mood.length)];
+  const price=(rng()*.5+.05).toFixed(3);
+  return { id:i+1, rarity:r, bg, hat, eyes, chain, mood, price };
+});
+
+/* ─── DRAW WHALE ON CANVAS ─── */
+function drawWhale(canvas, card, size=160){
+  canvas.width=size; canvas.height=size;
+  const c=canvas.getContext('2d');
+  const [c1,c2,c3]=BG_COLORS[card.bg]||['#0a1628','#1a6fd4','#00d4ff'];
+
+  // background gradient
+  const grd=c.createRadialGradient(size/2,size*.6,10,size/2,size*.6,size*.8);
+  grd.addColorStop(0,c2); grd.addColorStop(1,c1);
+  c.fillStyle=grd; c.fillRect(0,0,size,size);
+
+  // ocean glow
+  const og=c.createRadialGradient(size/2,size,0,size/2,size,size*.5);
+  og.addColorStop(0,c3+'55'); og.addColorStop(1,'transparent');
+  c.fillStyle=og; c.fillRect(0,0,size,size);
+
+  const s=size/160; // scale factor
+  c.save(); c.scale(s,s);
+  const W=160;
+
+  // --- whale body ---
+  c.save();
+  // tail
+  c.fillStyle='#1a5fc8';
+  c.beginPath();
+  c.ellipse(125,62,20,12,Math.PI*.3,0,Math.PI*2);
+  c.fill();
+  c.beginPath();
+  c.ellipse(138,55,14,8,Math.PI*.15,0,Math.PI*2);
+  c.fill();
+
+  // main body
+  const bodyGrad=c.createRadialGradient(72,82,5,72,82,52);
+  bodyGrad.addColorStop(0,'#3399ff');
+  bodyGrad.addColorStop(0.5,'#1a6fd4');
+  bodyGrad.addColorStop(1,'#0d4fa8');
+  c.fillStyle=bodyGrad;
+  c.beginPath();
+  c.ellipse(72,84,52,42,0,0,Math.PI*2);
+  c.fill();
+
+  // belly
+  c.fillStyle='#c8e8ff';
+  c.beginPath();
+  c.ellipse(68,96,26,20,0,0,Math.PI*2);
+  c.fill();
+
+  // spots
+  c.fillStyle='rgba(0,50,130,0.25)';
+  [[58,70,5],[90,76,4],[80,68,3],[100,88,3.5]].forEach(([x,y,r])=>{
+    c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
+  });
+
+  // left fin
+  c.fillStyle='#1a6fd4';
+  c.beginPath(); c.ellipse(42,100,14,8,Math.PI*.4,0,Math.PI*2); c.fill();
+
+  // mouth
+  c.strokeStyle='rgba(0,0,80,0.5)'; c.lineWidth=2;
+  c.beginPath(); c.arc(68,102,16,0.1,Math.PI-.1); c.stroke();
+  // tongue
+  c.fillStyle='#ff6b9d';
+  c.beginPath(); c.ellipse(68,108,8,5,0,0,Math.PI*2); c.fill();
+
+  // eyes area
+  c.fillStyle='white';
+  c.beginPath(); c.ellipse(60,78,9,8,-.2,0,Math.PI*2); c.fill();
+  c.beginPath(); c.ellipse(84,76,9,8,.2,0,Math.PI*2); c.fill();
+
+  // pixel sunglasses
+  c.fillStyle='#111';
+  c.fillRect(50,73,22,10); c.fillRect(76,71,22,10);
+  // checkered lens
+  c.fillStyle='white';
+  for(let px=0;px<3;px++) for(let py=0;py<2;py++){
+    if((px+py)%2===0){ c.fillRect(51+px*7,74+py*4,7,4); }
+  }
+  for(let px=0;px<3;px++) for(let py=0;py<2;py++){
+    if((px+py)%2===0){ c.fillRect(77+px*7,72+py*4,7,4); }
+  }
+  // bridge
+  c.fillStyle='#111'; c.fillRect(72,75,4,4);
+
+  // anchor tattoo
+  c.strokeStyle='rgba(0,30,100,0.5)'; c.lineWidth=1.5;
+  c.beginPath(); c.arc(98,93,6,0,Math.PI*2); c.stroke();
+  c.beginPath(); c.moveTo(98,87); c.lineTo(98,99); c.stroke();
+  c.beginPath(); c.moveTo(93,97); c.lineTo(103,97); c.stroke();
+
+  // --- HAT ---
+  if(card.hat==='Crown 👑' || card.hat==='None' && card.rarity==='legendary'){
+    // crown base
+    const cg=c.createLinearGradient(50,30,80,50);
+    cg.addColorStop(0,'#ffe066'); cg.addColorStop(1,'#cc8800');
+    c.fillStyle=cg;
+    c.fillRect(50,42,44,14);
+    // points
+    c.beginPath();
+    c.moveTo(50,42); c.lineTo(54,28); c.lineTo(62,40);
+    c.lineTo(72,25); c.lineTo(82,40); c.lineTo(90,28); c.lineTo(94,42);
+    c.closePath(); c.fill();
+    // gems
+    [[63,34,'#ff00aa'],[72,26,'#ff00aa'],[81,34,'#44aaff']].forEach(([x,y,col])=>{
+      c.fillStyle=col; c.beginPath(); c.arc(x,y,3.5,0,Math.PI*2); c.fill();
+      c.strokeStyle='white'; c.lineWidth=.8; c.stroke();
+    });
+  } else if(card.hat==='Pirate 🏴‍☠️'){
+    c.fillStyle='#1a1a1a';
+    c.beginPath(); c.ellipse(72,44,34,10,0,0,Math.PI*2); c.fill();
+    c.beginPath(); c.moveTo(46,44); c.lineTo(98,44); c.lineTo(90,24); c.lineTo(54,24); c.closePath(); c.fill();
+    // skull
+    c.fillStyle='white';
+    c.beginPath(); c.arc(72,34,8,0,Math.PI*2); c.fill();
+    c.fillStyle='#1a1a1a';
+    c.fillRect(67,39,4,4); c.fillRect(73,39,4,4);
+    c.beginPath(); c.arc(72,34,4,0,Math.PI*2); c.fill();
+  } else if(card.hat==='Headphones 🎧'){
+    c.strokeStyle='#333'; c.lineWidth=5;
+    c.beginPath(); c.arc(72,60,30,Math.PI,0); c.stroke();
+    c.fillStyle='#222'; c.strokeStyle='#555'; c.lineWidth=2;
+    [[42,60],[102,60]].forEach(([x,y])=>{
+      c.beginPath(); c.arc(x,y,8,0,Math.PI*2); c.fill(); c.stroke();
+    });
+    c.fillStyle='#00d4ff';
+    [[42,60],[102,60]].forEach(([x,y])=>{
+      c.beginPath(); c.arc(x,y,4,0,Math.PI*2); c.fill();
+    });
+  } else if(card.hat==='Captain ⚓'){
+    c.fillStyle='#fff';
+    c.fillRect(52,40,40,18);
+    c.fillStyle='#000814';
+    c.fillRect(50,54,44,6);
+    c.fillRect(50,38,44,4);
+    // anchor badge
+    c.fillStyle='#ffd700';
+    c.beginPath(); c.arc(72,48,5,0,Math.PI*2); c.fill();
+  } else if(card.hat==='Beanie 🧢'){
+    c.fillStyle=c3;
+    c.beginPath(); c.ellipse(72,46,28,20,0,0,Math.PI*2); c.fill();
+    c.fillStyle=c2;
+    c.fillRect(46,56,52,8);
+    c.fillStyle='white';
+    c.beginPath(); c.arc(72,30,6,0,Math.PI*2); c.fill();
+  }
+
+  // --- CHAIN ---
+  if(card.chain!=='None'){
+    c.strokeStyle='#ffd700'; c.lineWidth=3;
+    c.beginPath(); c.arc(72,110,22,Math.PI*.1,Math.PI*.9); c.stroke();
+    // pendant
+    if(card.chain==='Diamond W 💎'){
+      c.fillStyle='#00d4ff';
+      c.beginPath(); c.moveTo(72,124); c.lineTo(66,130); c.lineTo(72,136); c.lineTo(78,130); c.closePath(); c.fill();
+      c.fillStyle='white'; c.font='bold 7px sans-serif'; c.textAlign='center';
+      c.fillText('W',72,134);
+    } else {
+      c.fillStyle='#ffd700';
+      c.beginPath(); c.arc(72,126,5,0,Math.PI*2); c.fill();
+      c.fillStyle='#00d4ff'; c.beginPath(); c.arc(72,126,2.5,0,Math.PI*2); c.fill();
+    }
+  }
+
+  // rarity glow frame
+  c.restore();
+  const rc=RARITY_COLORS[card.rarity];
+  c.strokeStyle=rc+'88'; c.lineWidth=3;
+  c.strokeRect(2,2,W-4,W-4);
+  if(card.rarity==='legendary'){
+    c.shadowColor=rc; c.shadowBlur=20;
+    c.strokeStyle=rc; c.lineWidth=2;
+    c.strokeRect(4,4,W-8,W-8);
+    c.shadowBlur=0;
+  }
+
+  c.restore();
+}
+
+/* ─── BUILD GRID ─── */
+const grid=document.getElementById('grid');
+
+function buildCards(filter='all'){
+  grid.innerHTML='';
+  const filtered=filter==='all'?CARDS:CARDS.filter(c=>c.rarity===filter);
+  filtered.forEach((card,idx)=>{
+    const div=document.createElement('div');
+    div.className='nft-card';
+    div.dataset.rarity=card.rarity;
+    div.style.animationDelay=(idx%20)*.03+'s';
+
+    const wrap=document.createElement('div'); wrap.className='card-img-wrap';
+    const cvs=document.createElement('canvas'); cvs.className='card-canvas';
+    wrap.appendChild(cvs);
+
+    const rb=document.createElement('div');
+    rb.className=`rarity-badge r-${card.rarity}`;
+    rb.textContent=card.rarity.charAt(0).toUpperCase()+card.rarity.slice(1);
+    wrap.appendChild(rb);
+
+    div.appendChild(wrap);
+    div.innerHTML+=`
+      <div class="card-shine"></div>
+      <div class="card-info">
+        <div class="card-name">Whalcy #${card.id}</div>
+        <div class="card-trait">${card.mood} · ${card.hat}</div>
+        <div class="card-footer">
+          <span class="card-price">◎ ${card.price}</span>
+          <a class="card-btn" href="https://opensea.io/collection/whalcy-whale" target="_blank">Buy</a>
+        </div>
+      </div>`;
+
+    div.addEventListener('click',()=>openModal(card));
+    grid.appendChild(div);
+    requestAnimationFrame(()=>drawWhale(cvs,card,300));
+  });
+}
+
+/* ─── MODAL ─── */
+function openModal(card){
+  document.getElementById('modal-name').textContent=`Whalcy #${card.id}`;
+  const rc=RARITY_COLORS[card.rarity];
+  document.getElementById('modal-rarity').innerHTML=
+    `<span style="color:${rc};font-weight:900;text-transform:uppercase">${card.rarity}</span> &nbsp;·&nbsp; ◎ ${card.price} ETH`;
+  const traits=document.getElementById('modal-traits');
+  traits.innerHTML=[card.bg,card.hat,card.eyes,card.chain,card.mood]
+    .filter(t=>t!=='None')
+    .map(t=>`<span class="modal-trait-tag">${t}</span>`).join('');
+  const mc=document.getElementById('modal-canvas');
+  drawWhale(mc,card,400);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+document.getElementById('modal-close').onclick=()=>
+  document.getElementById('modal-overlay').classList.remove('open');
+document.getElementById('modal-overlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+});
+
+/* ─── FILTER ─── */
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    buildCards(btn.dataset.filter);
+  });
+});
+
+/* ─── BUBBLES ─── */
+const bubbleContainer=document.getElementById('bubbles');
+for(let i=0;i<18;i++){
+  const b=document.createElement('div'); b.className='bubble';
+  const sz=Math.random()*40+10;
+  b.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;
+    animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*8}s;`;
+  bubbleContainer.appendChild(b);
+}
+
+/* ─── SCROLL REVEAL ─── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ─── INIT ─── */
+buildCards();
+</script>
+</body>
+</html>
 
